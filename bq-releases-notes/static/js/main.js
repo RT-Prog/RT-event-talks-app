@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshIcon = document.getElementById('refresh-icon');
     const filterChips = document.querySelectorAll('.filter-chip');
     const exportCsvBtn = document.getElementById('export-csv-btn');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
     
     // Tweet Composer Elements
     const tweetModal = document.getElementById('tweet-modal');
@@ -28,12 +29,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCloseComposer = document.getElementById('btn-close-composer');
 
     // Init
+    // Restore saved theme from local storage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+    }
     fetchReleases();
 
     // Event Listeners
     refreshBtn.addEventListener('click', () => fetchReleases(true));
     if (exportCsvBtn) {
         exportCsvBtn.addEventListener('click', exportToCSV);
+    }
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            if (document.body.classList.contains('light-mode')) {
+                localStorage.setItem('theme', 'light');
+            } else {
+                localStorage.setItem('theme', 'dark');
+            }
+        });
     }
     
     searchInput.addEventListener('input', (e) => {

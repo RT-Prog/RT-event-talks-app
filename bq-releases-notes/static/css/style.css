@@ -728,3 +728,126 @@ header {
     box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
   }
 }
+
+/* Light Mode Overrides */
+body.light-mode {
+  --bg-primary: #f8fafc;
+  --bg-secondary: rgba(241, 245, 249, 0.85);
+  --card-bg: rgba(255, 255, 255, 0.75);
+  --card-border: rgba(99, 102, 241, 0.15);
+  --card-border-hover: rgba(99, 102, 241, 0.38);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  --primary-glow: rgba(79, 70, 229, 0.22);
+  
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.07) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.09) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(241, 245, 249, 0.8) 0px, transparent 50%);
+}
+
+/* Light Mode Specific Components overrides */
+body.light-mode .logo-text h1 {
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light-mode .search-input {
+  background: rgba(255, 255, 255, 0.8);
+  color: #0f172a;
+  border-color: rgba(99, 102, 241, 0.18);
+}
+
+body.light-mode .search-input:focus {
+  background: #ffffff;
+  border-color: var(--primary);
+}
+
+body.light-mode .filter-chip {
+  background: rgba(241, 245, 249, 0.8);
+  border-color: rgba(0, 0, 0, 0.05);
+  color: #475569;
+}
+
+body.light-mode .filter-chip:hover {
+  background: rgba(241, 245, 249, 1);
+  color: #0f172a;
+}
+
+body.light-mode .filter-chip.active {
+  background: rgba(79, 70, 229, 0.09);
+  color: #4f46e5;
+  border-color: var(--primary);
+}
+
+body.light-mode .timeline-dot {
+  background: #ffffff;
+  box-shadow: 0 0 15px rgba(79, 70, 229, 0.12);
+}
+
+body.light-mode .timeline-date {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(99, 102, 241, 0.15);
+  color: #0f172a;
+}
+
+body.light-mode .note-card.selected {
+  background: rgba(79, 70, 229, 0.05);
+  border-color: var(--primary);
+}
+
+body.light-mode .card-body a {
+  color: #4f46e5;
+  border-bottom-color: rgba(79, 70, 229, 0.35);
+}
+
+body.light-mode .card-body a:hover {
+  color: #312e81;
+}
+
+body.light-mode .card-body code {
+  background: rgba(241, 245, 249, 0.8);
+  border-color: rgba(0, 0, 0, 0.06);
+  color: #0f172a;
+}
+
+body.light-mode .skeleton {
+  background: linear-gradient(90deg, var(--card-bg) 25%, rgba(226, 232, 240, 0.8) 50%, var(--card-bg) 75%);
+}
+
+body.light-mode .tweet-modal {
+  background: rgba(255, 255, 255, 0.92);
+  border-top-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .tweet-text-area {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #0f172a;
+}
+
+body.light-mode .tweet-text-area:focus {
+  border-color: var(--twitter-blue);
+}
+
+body.light-mode .btn-close-composer {
+  color: #475569;
+}
+
+body.light-mode .btn-close-composer:hover {
+  color: #0f172a;
+}
+
+/* Theme Toggle Button Icons Logic */
+body.light-mode #theme-sun-icon {
+  display: none !important;
+}
+
+body:not(.light-mode) #theme-moon-icon {
+  display: none !important;
+}
