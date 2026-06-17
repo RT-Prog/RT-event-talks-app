@@ -851,3 +851,17 @@ body.light-mode #theme-sun-icon {
 body:not(.light-mode) #theme-moon-icon {
   display: none !important;
 }
+
+body.light-mode .btn-refresh {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(99, 102, 241, 0.18);
+  color: #0f172a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .btn-refresh:hover {
+  background: #ffffff;
+  border-color: rgba(99, 102, 241, 0.35);
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
+}
