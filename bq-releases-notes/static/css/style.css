@@ -452,6 +452,33 @@ header {
   box-shadow: 0 4px 10px var(--twitter-blue-glow);
 }
 
+.btn-icon-copy {
+  background: rgba(148, 163, 184, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: var(--text-secondary);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-icon-copy:hover {
+  background: rgba(148, 163, 184, 0.25);
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.btn-icon-copy.copied {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--color-feature);
+  color: var(--color-feature);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
 /* Card Content styling for parsed HTML */
 .card-body {
   color: var(--text-primary);

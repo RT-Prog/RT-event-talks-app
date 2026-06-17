@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshBtn = document.getElementById('refresh-btn');
     const refreshIcon = document.getElementById('refresh-icon');
     const filterChips = document.querySelectorAll('.filter-chip');
+    const exportCsvBtn = document.getElementById('export-csv-btn');
     
     // Tweet Composer Elements
     const tweetModal = document.getElementById('tweet-modal');
@@ -31,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event Listeners
     refreshBtn.addEventListener('click', () => fetchReleases(true));
+    if (exportCsvBtn) {
+        exportCsvBtn.addEventListener('click', exportToCSV);
+    }
     
     searchInput.addEventListener('input', (e) => {
         searchQuery = e.target.value.toLowerCase().trim();
@@ -192,6 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             </span>
                         </div>
                         <div class="card-actions">
+                            <button class="btn-icon-copy" title="Copy to clipboard">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                            </button>
                             <button class="btn-icon-share" title="Tweet this update" data-date="${entry.date}" data-type="${item.type}" data-link="${entry.link}">
                                 <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
@@ -206,8 +215,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Add Click to Select Card Handler
                 cardEl.addEventListener('click', (e) => {
-                    // Prevent trigger if clicking the share icon or links inside
-                    if (e.target.closest('.btn-icon-share') || e.target.closest('a')) {
+                    // Prevent trigger if clicking the share or copy icons or links inside
+                    if (e.target.closest('.btn-icon-share') || e.target.closest('.btn-icon-copy') || e.target.closest('a')) {
                         return;
                     }
                     
@@ -251,6 +260,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                     
                     openTweetComposer(selectedNote);
+                });
+
+                // Add copy to clipboard click handler
+                cardEl.querySelector('.btn-icon-copy').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const copyBtn = e.currentTarget;
+                    const textToCopy = item.content_text;
+                    
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.classList.add('copied');
+                        const originalHTML = copyBtn.innerHTML;
+                        
+                        // Show checkmark
+                        copyBtn.innerHTML = `
+                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        `;
+                        copyBtn.title = "Copied!";
+                        
+                        setTimeout(() => {
+                            copyBtn.classList.remove('copied');
+                            copyBtn.innerHTML = originalHTML;
+                            copyBtn.title = "Copy to clipboard";
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Could not copy text: ', err);
+                    });
                 });
 
                 itemsEl.appendChild(cardEl);
@@ -342,5 +379,45 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingStateEl.style.display = 'none';
         errorStateEl.style.display = 'none';
         emptyStateEl.style.display = 'block';
+    }
+
+    // Export current filtered releases to CSV file
+    function exportToCSV() {
+        if (filteredReleases.length === 0) {
+            alert('No release notes to export.');
+            return;
+        }
+
+        let csvRows = [];
+        // CSV Headers
+        csvRows.push(["Date", "Category", "Link", "Description"].map(h => `"${h.replace(/"/g, '""')}"`).join(","));
+
+        filteredReleases.forEach(entry => {
+            entry.items.forEach(item => {
+                const row = [
+                    entry.date,
+                    item.type,
+                    entry.link,
+                    item.content_text
+                ].map(val => `"${val.replace(/"/g, '""')}"`);
+                csvRows.push(row.join(","));
+            });
+        });
+
+        const csvString = csvRows.join("\n");
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        
+        const dateStr = new Date().toISOString().slice(0, 10);
+        const catStr = activeCategory.toLowerCase();
+        link.setAttribute("download", `bigquery_releases_${catStr}_${dateStr}.csv`);
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
 });
